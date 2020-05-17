@@ -1,0 +1,71 @@
+<div class="col-md-12">
+    <div class="general-block-decorator">
+        <div class="title title-without-tabs">{intl l="Product upsell configuration" d='productupsell.bo.default'}</div>
+
+        <div class="alert alert-info">
+            {intl l="Select below the category in which you'll put the upsell products. Then go to this category, and create the upsell products, or use existing ones. Enter the purchase amount from which the product will be automatically added to the customer cart." d='productupsell.bo.default'}
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                {form name="productupsell.configuration.form"}
+                <form method="POST" id="pages-form" action="{url path="/admin/module/productupsell/config/edit"}" {form_enctype} class="clearfix">
+                    {form_hidden_fields}
+
+                    {if $form_error}<div class="alert alert-danger">{$form_error_message}</div>{/if}
+
+                    {form_field form=$form field='success_url'}
+                        <input type="hidden" name="{$name}" value="{url path={navigate to="current"}}"/>
+                    {/form_field}
+
+                    {custom_render_form_field field="productupsell_category"}
+                        <div class="input-group">
+                            <select {form_field_attributes field="productupsell_category" value=$upsell_cart_amount}>
+                                {foreach $choices as $choice}
+                                    <option value="{$choice->value}" {if (is_array($value) && in_array($choice->value, $value)) || $choice->value == $value}selected="selected"{/if}>{$choice->label}</option>
+                                {/foreach}
+                            </select>
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary" title="{intl l='Save'}">
+                                    {intl l="Save" d='productupsell.bo.default'}
+                                </button>
+                            </span>
+                        </div>
+                    {/custom_render_form_field}
+
+                    <div class="title title-without-tabs">{intl l="Current upsell products" d='productupsell.bo.default'}</div>
+
+                    {ifloop rel="productupsell_loop"}
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th class="text-center">Online</th>
+                                <th class="text-right">Cart amount</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        {loop type="productupsell" name="productupsell_loop"}
+                            <tr>
+                                {loop type="product" name="prod" backend_context=1 visible='*' id=$PRODUCT_ID}
+                                    <td><a href="{url path="/admin/products/update?product_id=%id" id=$ID}">{$TITLE}</a></td>
+                                    <td class="text-center">{if $VISIBLE}<span class="glyphicon glyphicon-check"></span>{/if}</td>
+                                {/loop}
+                                <td class="text-right">{format_money number=$MINIMUM_CART_AMOUNT}</td>
+                            </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                    {/ifloop}
+                    {elseloop rel="productupsell_loop"}
+                        <div class="alert alert-info">
+                            {intl l='There\'s currently no product configured for upselling. Please go to upsell category and set minimum cart price to the products' d='productupsell.bo.default'}
+                        </div>
+                    {/elseloop}
+                </form>
+                {/form}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+
+{loop type="productupsell.category" name="is_upsell" category_id=$category_id}
+    {custom_render_form_field field="minimum_cart_amount" value=$upsell_cart_amount}
+        <div class="input-group">
+            <input type="number" step="0.01" {form_field_attributes field="minimum_cart_amount" value=$upsell_cart_amount}>
+            <span class="input-group-addon">
+                {currency attr="symbol"}
+            </span>
+        </div>
+    {/custom_render_form_field}
+{/loop}
