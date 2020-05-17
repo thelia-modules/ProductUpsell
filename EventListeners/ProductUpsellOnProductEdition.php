@@ -101,10 +101,8 @@ class ProductUpsellOnProductEdition extends BaseAction implements EventSubscribe
     public static function getSubscribedEvents()
     {
         return [
-            TheliaEvents::FORM_AFTER_BUILD.'.thelia_product_creation'  => ['addMinimumCartField', 128],
             TheliaEvents::FORM_AFTER_BUILD.'.thelia_product_modification'  => ['addMinimumCartField', 128],
             TheliaEvents::PRODUCT_UPDATE => ['saveUpsellProduct', 96],
-            TheliaEvents::PRODUCT_CREATE => ['saveUpsellProduct', 96],
         ];
     }
 }
