@@ -20,10 +20,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Thelia\Core\Event\Cart\CartEvent;
 use Thelia\Core\Event\TheliaEvents;
 use Thelia\Core\HttpFoundation\Request;
-use Thelia\Model\CartItem;
 use Thelia\Model\CartItemQuery;
-use Thelia\Model\Map\ProductCategoryTableMap;
-use Thelia\Model\ProductCategoryQuery;
 use Thelia\TaxEngine\TaxEngine;
 
 /**
@@ -65,16 +62,14 @@ class ProductUpsellOnCartChange implements EventSubscriberInterface
             return;
         }
 
+        // Process every event, the ones with a cartItme object and the ones with only a cart item ID
         if (null === $cartItem = $event->getCartItem()) {
             $cartItem = CartItemQuery::create()->findPk((int) $event->getCartItemId());
-
-            if (null === $cartItem) {
-                return;
-            }
         }
 
         // Do not process a product which belongs to upsell category
-        if (ProductUpsell::isProductInUpsellCategory($cartItem->getProductId())) {
+        // cartItem could be null if the cart item was deleted.
+        if (null !== $cartItem && ProductUpsell::isProductInUpsellCategory($cartItem->getProductId())) {
             return;
         }
 
