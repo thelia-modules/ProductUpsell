@@ -1,5 +1,8 @@
 # Product Upsell
 
+> This module is no longer maintained and will not be ported to Thelia 3. Its 2.x versions remain available on Packagist.
+> There is no replacement module.
+
 Sale more by offering upsell products to your customers if the cart total is greater than a defined amount.
 
 ## Installation
